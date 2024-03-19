@@ -80,7 +80,7 @@
     					alert('먼저 기존창을 닫으세요.');
     					detailWindow.focus();
     				}
-    			}
+    			} 
     		})
     		
     	})

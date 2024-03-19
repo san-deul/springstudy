@@ -19,9 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Controller  // @ResponseBody annotation 은 ResponseEntity 클래스가 제공한다.
 public class BoardController3 {
 
-  
   private final BoardService boardService;
-  
   
   @GetMapping("/list.do")
   public ResponseEntity<List<BoardDto>> list() {
