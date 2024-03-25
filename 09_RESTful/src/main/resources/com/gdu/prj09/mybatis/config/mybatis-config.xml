@@ -12,8 +12,8 @@
   
   <!-- typeAliases -->
   <typeAliases>
-    <typeAlias alias="HistoryDto" type="com.gdu.prj08.dto.HistoryDto"/>
-    <typeAlias alias="FileDto" type="com.gdu.prj08.dto.FileDto"/>
+    <typeAlias alias="MemberDto"  type="com.gdu.prj09.dto.MemberDto"/>
+    <typeAlias alias="AddressDto" type="com.gdu.prj09.dto.AddressDto"/>
   </typeAliases>
   
 </configuration>

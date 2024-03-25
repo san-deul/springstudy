@@ -14,5 +14,5 @@ public class FileDto {
   private String uploadPath;
   private String originalFilename;
   private String filesystemName;
-  private String historyNo;
+  private int historyNo;
 }

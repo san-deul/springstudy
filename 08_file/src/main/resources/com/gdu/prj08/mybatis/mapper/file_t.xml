@@ -9,36 +9,34 @@
           parameterType="HistoryDto">
     <selectKey keyProperty="historyNo" resultType="int" order="BEFORE">
       SELECT HISTORY_SEQ.NEXTVAL
-        FORM DUAL
+        FROM DUAL
     </selectKey>
     INSERT INTO HISTORY_T (
-      HISTORY_NO
-    , WRITER
-    , IP
-    ) VALUES(
-       #{historyNo}
-     , #{writer}
-     , #{ip}
+        HISTORY_NO
+      , WRITER
+      , IP
+    ) VALUES (
+        #{historyNo}
+      , #{writer}
+      , #{ip}
     )
   </insert>
   
   <insert id="insertFile"
-        parameterType="FileDto">
-     INSERT INTO FILE_T(
+          parameterType="FileDto">
+    INSERT INTO FILE_T(
         FILE_NO
-       ,UPLOAD_PATH
-       ,ORIGINAL_FILENAME
-       ,HISTORY_NO
-     ) VALUES(
-      FILE_SEQ.NEXTVAL
-     , #{uploadPath}
-     , #{originalFilename}
-     , #{filesystemName}
-     , #{historyNo}
-     )
+      , UPLOAD_PATH
+      , ORIGINAL_FILENAME
+      , FILESYSTEM_NAME
+      , HISTORY_NO
+    ) VALUES (
+        FILE_SEQ.NEXTVAL
+      , #{uploadPath}
+      , #{originalFilename}
+      , #{filesystemName}
+      , #{historyNo}
+    )
   </insert>
   
-  
-
-
 </mapper>

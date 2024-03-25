@@ -1,4 +1,4 @@
-package com.gdu.prj08.dto;
+package com.gdu.prj09.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class HistoryDto {
-  private int historyNo;
-  private String writer;
-  private String ip;
+public class MemberDto {
+  
+  private int memberNo;
+  private String email;
+  private String name;
+  private String gender;
+ 
 }
