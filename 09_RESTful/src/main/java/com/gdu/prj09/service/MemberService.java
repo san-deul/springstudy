@@ -31,7 +31,7 @@ public interface MemberService {
 /*  -------> getMembers(int page, int display)------->GetTotalNemberCount()
                                                GETMEMBERlIST(MAP,AMP)                                              
 */
-  ResponseEntity<MemberDto> getMemberByNo(int memberNo);
+  ResponseEntity<Map<String,Object>> getMemberByNo(int memberNo);
   ResponseEntity<Map<String, Object>> registerMember(Map<String, Object> map, HttpServletResponse response);
   ResponseEntity<Map<String, Object>> modifyMember(MemberDto member);
   ResponseEntity<Map<String, Object>> removeMember(int memberNo);

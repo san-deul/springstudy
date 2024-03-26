@@ -50,20 +50,29 @@ public class MemberDaoImpl implements MemberDao {
 
   @Override
   public int getTotalMemberCount() {
-    // TODO Auto-generated method stub
-    return 0;
+
+    return sqlSessionTemplate.selectOne(Ns + "getTotalMemberCount");
   }
 
   @Override
-  public List<MemberDto> getMemberList(Map<String, Object> map) {
+  public List<AddressDto> getMemberList(Map<String, Object> map) {
     // TODO Auto-generated method stub
-    return null;
+    return sqlSessionTemplate.selectList(Ns +"getMemberList",map);
   }
 
   @Override
   public MemberDto getMemberByNo(int memberNo) {
-    // TODO Auto-generated method stub
-    return null;
+    return sqlSessionTemplate.selectOne(Ns + "getMemberByNo", memberNo);
+  }
+  
+  @Override
+  public int getTotalAddressCountByNo(int memberNo) {
+    return sqlSessionTemplate.selectOne(Ns + "getTotalAddressCountByNo" , memberNo);
   }
 
+  @Override
+  public List<AddressDto> getAddressListByNo(Map<String, Object> map) {
+    return sqlSessionTemplate.selectList(Ns + "getAddressListByNo", map);
+  }
+    //List를 반환하든 MemberDto를 반환하든, MemeberDto를 반환하는 거임
 }

@@ -31,8 +31,8 @@
     </div>
     <div>
       <input type="text" id="zonecode" placeholder="우편번호">
-      <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-      <input type="text" id="address" placeholder="주소"><br>
+      <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" ><br>
+      <input type="text" id="address" placeholder="주소" readonly><br>
       <input type="text" id="detailAddress" placeholder="상세주소">
       <input type="text" id="extraAddress" placeholder="참고항목">
       <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -91,6 +91,14 @@
     <hr>
     
     <div>
+      <div id="total"></div>
+      <div>
+        <select id="display">
+          <option>20</option>
+          <option>50</option>
+          <option>100</option>
+        </select>
+      </div>
       <table border="1">
         <thead>
           <tr>
@@ -101,75 +109,65 @@
             <td>버튼</td>
           </tr>
         </thead>
-        <tbody id="members"></tbody>
+        <tbody id="members">
+        </tbody>
         <tfoot>
           <tr>
             <td colspan="5" id="paging"></td>
           </tr>
         </tfoot>
       </table>
+      <button type="button" id="btn-select-remove">선택삭제</button>
     </div>
     
   </div>
   
+  <script src="${contextPath}/resources/js/member.js"></script>
   <script>
   
-    // jQuery 객체 선언
-    var email = $('#email');
-    var mName = $('#name');
-    var gender = $(':radio[name=gender]');
-    var zonecode = $('#zonecode');
-    var address = $('#address');
-    var detailAddress = $('#detailAddress');
-    var extraAddress = $('#extraAddress');
-    var btnInit = $('#btn-init');
-    var btnRegister = $('#btn-register');
-    var btnModify = $('#btn-modify');
-    var btnRemove = $('#btn-remove');
+  // jQuery 객체 선언
+ // var btnDetail = $('.btn-detail');
+	
+	// 함수 표현식(함수 만들기)
+  const getMemberByNo = (evt)=>{
+	  $.ajax({
+		  type:'GET',
+		  url:getContextPath() + '/members/' + evt.target.dataset.memberNo,
+		  dataType:'json'
+	  }).done(resData=>{ /*
+		                   resData = {
+			                      "addressList":[
+			                    	 {
+			                    		"addresNo":1,
+			                    		"zonecode":"12345",
+			                    		"address:"서울시 구로구 디지털로",
+			                    		"detailAddress":"카카오",
+			                    		"extraAddress":"(가산동)"
+			                    	 },
+			                    	 ....
+			                      ],
+			                      "member": {
+			                    	  "memberNo": 1,
+			                    	  "email": 'email@email.com',
+			                    	  "name": "gildong",
+			                    	  "gender":"man"
+			                      }
+		                     } 
+		                   */
+		  email.val(resData.member.email);
+		  mName.val(resData.member.name);
+		  $(':radio[value=' + resData.member.gender + ']').prop('checked', true);
+		  zonecode.val(resData.addressList[0].zonecode);
+		  address.val(resData.addressList[0].address);
+		  detailAddress.val(resData.addressList[0].detailAddress);
+		  extraAddress.val(resData.addressList[0].extraAddress);
+	  }).fail(jqXHR=>{
+		  alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+	  })
+  }
   
-    // 함수 표현식 (함수 만들기)
-    const fnInit = ()=>{
-      email.val('');
-      mName.val('');
-      $('#none').prop('checked', true);
-      zonecode.val('');
-      address.val('');
-      detailAddress.val('');
-      extraAddress.val('');
-    }
-
-    const fnRegisterMember = ()=>{
-      $.ajax({
-        // 요청
-        type: 'POST',
-        url: '${contextPath}/members',
-        contentType: 'application/json',  // 보내는 데이터의 타입
-        data: JSON.stringify({            // 보내는 데이터 (문자열 형식의 JSON 데이터)
-          'email': email.val(),
-          'name': mName.val(),
-          'gender': $(':radio:checked').val(),
-          'zonecode': zonecode.val(),
-          'address': address.val(),
-          'detailAddress': detailAddress.val(),
-          'extraAddress': extraAddress.val()
-        }),
-        // 응답
-        dataType: 'json'  // 받는 데이터 타입
-      }).done(resData=>{  // resData = {"insertCount": 2}
-        if(resData.insertCount === 2){
-          alert('정상적으로 등록되었습니다.');
-          fnInit();
-        }
-      }).fail(jqXHR=>{
-        alert(jqXHR.responseText);
-      })
-    }
-    
-    
-    // 함수 호출 및 이벤트
-    fnInit();
-    btnInit.on('click', fnInit);
-    btnRegister.on('click', fnRegisterMember);
+  //함수 호출 및 이벤트
+  $(document).on('click','.btn-detail', (evt)=>{getMemberByNo(evt);})
   
   </script>
 
