@@ -11,7 +11,8 @@ public interface MemberDao {
   
   int insertMember(MemberDto member);
   int insertAddress(AddressDto address);
-  int updateMember(MemberDto member);
+  int updateMember(Map<String, Object> map);
+  int updateAddress(Map<String, Object> map);
   int deleteMember(int memberNo);
   int deleteMemebers(List<String> memberNoList);
   //member_no=1 과 member_no='1'이 같으니까 int로 주나 List로 주나 

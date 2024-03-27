@@ -13,6 +13,7 @@
 
   <div>
     <h1>회원관리</h1>
+    <input type="hidden" id="member-no" >
     <div>
       <label for="email">이메일</label>
       <input type="text" id="email">
@@ -22,16 +23,16 @@
       <input type="text" id="name">
     </div>
     <div>
-      <label for="none">선택안함</label>
       <input type="radio" name="gender" id="none" value="none" checked>
-      <label for="man">남자</label>
+      <label for="none">선택안함</label>
       <input type="radio" name="gender" id="man" value="man">
-      <label for="woman">여자</label>
+      <label for="man">남자</label>
       <input type="radio" name="gender" id="woman" value="woman">
+      <label for="woman">여자</label>
     </div>
     <div>
-      <input type="text" id="zonecode" placeholder="우편번호">
-      <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" ><br>
+      <input type="text" id="zonecode" onclick="execDaumPostcode()" placeholder="우편번호" readonly>
+      <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
       <input type="text" id="address" placeholder="주소" readonly><br>
       <input type="text" id="detailAddress" placeholder="상세주소">
       <input type="text" id="extraAddress" placeholder="참고항목">
@@ -93,11 +94,12 @@
     <div>
       <div id="total"></div>
       <div>
-        <select id="display">
-          <option>20</option>
-          <option>50</option>
-          <option>100</option>
-        </select>
+      <button type="button" id="btn-select-remove">선택삭제</button>
+      <select id="display">
+        <option>20</option>
+        <option>50</option>
+        <option>100</option>
+      </select>
       </div>
       <table border="1">
         <thead>
@@ -109,66 +111,31 @@
             <td>버튼</td>
           </tr>
         </thead>
-        <tbody id="members">
-        </tbody>
+        <tbody id="members"></tbody>
         <tfoot>
           <tr>
             <td colspan="5" id="paging"></td>
           </tr>
         </tfoot>
       </table>
-      <button type="button" id="btn-select-remove">선택삭제</button>
     </div>
     
   </div>
   
-  <script src="${contextPath}/resources/js/member.js"></script>
+  <script src="${contextPath}/resources/js/member.js?dt=<%=System.currentTimeMillis()%>"></script>
   <script>
   
-  // jQuery 객체 선언
- // var btnDetail = $('.btn-detail');
-	
-	// 함수 표현식(함수 만들기)
-  const getMemberByNo = (evt)=>{
-	  $.ajax({
-		  type:'GET',
-		  url:getContextPath() + '/members/' + evt.target.dataset.memberNo,
-		  dataType:'json'
-	  }).done(resData=>{ /*
-		                   resData = {
-			                      "addressList":[
-			                    	 {
-			                    		"addresNo":1,
-			                    		"zonecode":"12345",
-			                    		"address:"서울시 구로구 디지털로",
-			                    		"detailAddress":"카카오",
-			                    		"extraAddress":"(가산동)"
-			                    	 },
-			                    	 ....
-			                      ],
-			                      "member": {
-			                    	  "memberNo": 1,
-			                    	  "email": 'email@email.com',
-			                    	  "name": "gildong",
-			                    	  "gender":"man"
-			                      }
-		                     } 
-		                   */
-		  email.val(resData.member.email);
-		  mName.val(resData.member.name);
-		  $(':radio[value=' + resData.member.gender + ']').prop('checked', true);
-		  zonecode.val(resData.addressList[0].zonecode);
-		  address.val(resData.addressList[0].address);
-		  detailAddress.val(resData.addressList[0].detailAddress);
-		  extraAddress.val(resData.addressList[0].extraAddress);
-	  }).fail(jqXHR=>{
-		  alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-	  })
-  }
+// jQuery 객체 선언
+//var jqCheckMember = $('.chk-member');
+
+
   
-  //함수 호출 및 이벤트
-  $(document).on('click','.btn-detail', (evt)=>{getMemberByNo(evt);})
-  
+
+
+
+// 함수 호출 및 이벤트
+
+
   </script>
 
 </body>

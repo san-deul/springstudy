@@ -31,21 +31,23 @@ public class MemberDaoImpl implements MemberDao {
   }
 
   @Override
-  public int updateMember(MemberDto member) {
-    // TODO Auto-generated method stub
-    return 0;
+  public int updateMember(Map<String, Object> map) {
+    return sqlSessionTemplate.update(Ns + "updateMember", map);
+  }
+  
+  @Override
+  public int updateAddress(Map<String, Object> map) {
+    return sqlSessionTemplate.update(Ns + "updateAddress", map);
   }
 
   @Override
   public int deleteMember(int memberNo) {
-    // TODO Auto-generated method stub
-    return 0;
+    return sqlSessionTemplate.delete(Ns + "deleteMember", memberNo);
   }
 
   @Override
   public int deleteMemebers(List<String> memberNoList) {
-    // TODO Auto-generated method stub
-    return 0;
+    return sqlSessionTemplate.delete(Ns + "deleteMembers", memberNoList);
   }
 
   @Override

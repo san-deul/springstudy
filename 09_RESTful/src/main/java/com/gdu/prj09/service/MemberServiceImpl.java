@@ -2,6 +2,7 @@ package com.gdu.prj09.service;
 
 import java.io.PrintWriter;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -95,6 +96,8 @@ public class MemberServiceImpl implements MemberService {
                                 
       insertCount += memberDao.insertAddress(address);
       
+      
+      
       result = new ResponseEntity<Map<String,Object>>(
                       Map.of("insertCount", insertCount),
                       HttpStatus.OK);
@@ -120,21 +123,41 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  public ResponseEntity<Map<String, Object>> modifyMember(MemberDto member) {
-    // TODO Auto-generated method stub
-    return null;
+  public ResponseEntity<Map<String, Object>> modifyMember(Map<String, Object> map) {
+
+    int updateMemberCount = memberDao.updateMember(map);
+    int updateAddressCount = memberDao.updateAddress(map);
+    
+    if(updateAddressCount == 0) {
+      AddressDto address = AddressDto.builder()
+                                .zonecode((String)map.get("zonecode"))
+                                .address((String)map.get("address"))
+                                .detailAddress((String)map.get("detailAddress"))
+                                .extraAddress((String)map.get("extraAddress"))
+                                .member(MemberDto.builder()
+                                          .memberNo(Integer.parseInt((String)map.get("memberNo")))
+                                       .build())
+                                .build();
+      updateAddressCount += memberDao.insertAddress(address);
+    } 
+    
+    return new ResponseEntity<Map<String,Object>>(Map.of("updateCount", updateMemberCount + updateAddressCount)
+                                                    , HttpStatus.OK);
+    
   }
 
   @Override
   public ResponseEntity<Map<String, Object>> removeMember(int memberNo) {
-    // TODO Auto-generated method stub
-    return null;
+
+    return new ResponseEntity<Map<String,Object>>(Map.of("deleteCount", memberDao.deleteMember(memberNo))
+                                                    , HttpStatus.OK);
   }
 
   @Override
   public ResponseEntity<Map<String, Object>> removeMembers(String memberNoList) {
-    // TODO Auto-generated method stub
-    return null;
+    
+    return new ResponseEntity<Map<String,Object>>(Map.of("deleteCount",memberDao.deleteMemebers(Arrays.asList(memberNoList.split(","))))
+        , HttpStatus.OK);
   }
 
 }
