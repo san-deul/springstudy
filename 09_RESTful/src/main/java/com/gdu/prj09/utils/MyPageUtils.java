@@ -27,7 +27,7 @@ public class MyPageUtils {
     /*
      *begin end
     1 - 1   20
-    1 - 21  40
+    2 - 21  40
     3 - 41  60
     */
     
