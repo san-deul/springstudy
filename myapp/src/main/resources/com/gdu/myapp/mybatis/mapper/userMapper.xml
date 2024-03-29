@@ -15,6 +15,18 @@
       <if test="pw!=null">AND PW = #{pw}</if>
     </where>
   </select>
+  
+  <insert id="insertAccessHistory"
+          parameterType="Map">
+     INSERT INTO ACCESS_HISTORY_T (
+      ACCESS_HISTORY_NO
+      ,EMAIL
+      ,IP
+      ,SIGNIN_DT
+      ,SIGNOUT_DT
+     ) VALUES(
+     )
+  </insert>
 
   <insert id="insertUser"
           parameterType="UserDto">
