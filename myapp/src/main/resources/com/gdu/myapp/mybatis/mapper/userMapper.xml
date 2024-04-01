@@ -8,7 +8,7 @@
   <select id="getUserByMap" 
           parameterType="Map"
           resultType="UserDto">
-    SELECT USER_NO, EMAIL, PW, NAME, GENDER, MOBILE, EVENT,AGREE, SIGNUP_KIND, PW_MODIFY_DT, SIGNUP_DT
+    SELECT USER_NO, EMAIL, PW, NAME, GENDER, MOBILE, EVENT_AGREE, SIGNUP_KIND, PW_MODIFY_DT, SIGNUP_DT
       FROM USER_T
     <where>
       <if test="email!=null">EMAIL = #{email}</if>
@@ -25,8 +25,20 @@
       ,SIGNIN_DT
       ,SIGNOUT_DT
      ) VALUES(
+     
      )
   </insert>
+
+  <select id="getLeaveUserByMap"
+          parameterType="Map"
+          resultType="LeaveUserDto">
+    SELECT LEAVE_USER_NO
+      FROM LEAVE_USER_T
+    <where>
+      <if test="email!=null">EMAIL = #{email}</if>
+    </where>
+  
+  </select>
 
   <insert id="insertUser"
           parameterType="UserDto">

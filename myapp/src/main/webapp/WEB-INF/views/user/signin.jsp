@@ -37,7 +37,7 @@
         <input type="password" id="pw" name="pw" placeholer="●●●●">
       </div>
       <div>
-        <input type="hidden" name="url" value="${url}">
+        <input type="hidden" name="url" value="${url}"> <!-- SIGN IN 후 페이지 이동할 곳  -->
         <button type="submit">Sign In</button>
       </div>
     </form>    

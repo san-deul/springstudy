@@ -17,13 +17,30 @@
 <script src="${contextPath}/resources/summernote-0.8.18-dist/summernote.min.js"></script>
 <script src="${contextPath}/resources/summernote-0.8.18-dist/lang/summernote-ko-KR.min.js"></script>
 
-
+<!-- font-awesome -->
+<style>
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap')
+  * {
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 400;
+  }
+</style>
 
 </head>
 <body>
-  
 
-  <a href="${contextPath}/user/signin.page">Sign In</a>
+  <!-- Sign In 안 된 경우 -->
+  <c:if test="${sessionScope.user == null}">  
+    <a href="${contextPath}/user/signin.page"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In</a>
+    <a href="${contextPath}/user/signup.page"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
+  </c:if>
+  <!-- Sign In 된 경우 -->
+  <c:if test="${sessionScope.user != null}">
+    ${sessionScope.user.name}님 반갑습니다
+  </c:if>
+
+ 
 
 
 
