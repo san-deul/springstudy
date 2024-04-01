@@ -49,7 +49,7 @@ public class MyController3 {
       3) 자동으로 Model 에 저장된다.
    * */
   
-  @RequestMapping(value="article/detail3.do", method=RequestMethod.GET)
+  @RequestMapping(value="/article/detail3.do", method=RequestMethod.GET)
   public String detail3(ArticleDto articleDto) {
     System.out.println("detail3:" + articleDto.getArticle_no());
     return "index";

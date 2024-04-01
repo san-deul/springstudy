@@ -13,8 +13,11 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+
 
 @PropertySource(value = "classpath:email.properties")
+@Component
 public class MyJavaMailUtils {
 
   @Autowired
@@ -25,9 +28,9 @@ public class MyJavaMailUtils {
     // 이메일을 보내는 호스트의 정보 : 구글
     Properties props = new Properties();
     props.put("mail.smtp.host", "smtp.gmail.com");
-    props.put("mail.smt.smtp.port", 587);
+    props.put("mail.smtp.port", 587);
     props.put("mail.smtp.auth", true);
-    props.put("mail.smtp.starttls.enalble", true);
+    props.put("mail.smtp.starttls.enable", true);
    
     
     // 사용자 정보 javax.mail.Session. 객체 생성 : 이메일을 보내는 사용자의 정보 (개인 정보)

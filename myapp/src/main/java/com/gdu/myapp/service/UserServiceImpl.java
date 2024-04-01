@@ -13,18 +13,21 @@ import org.springframework.stereotype.Service;
 
 import com.gdu.myapp.dto.UserDto;
 import com.gdu.myapp.mapper.UserMapper;
+import com.gdu.myapp.utils.MyJavaMailUtils;
 import com.gdu.myapp.utils.MySecurityUtils;
 
 @Service
 public class UserServiceImpl implements UserService {
 
   private final UserMapper userMapper;
+  private final MyJavaMailUtils myJavaMailUtils;
   
-  
-  public UserServiceImpl(UserMapper userMapper) {
+  public UserServiceImpl(UserMapper userMapper, MyJavaMailUtils myJavaMailUtils) {
     super();
     this.userMapper = userMapper;
+    this.myJavaMailUtils = myJavaMailUtils;
   }
+
 
   @Override
   public void signin(HttpServletRequest request, HttpServletResponse response) {
@@ -82,6 +85,25 @@ public class UserServiceImpl implements UserService {
     return new ResponseEntity<>(Map.of("enableEmail", enableEmail)
                                       , HttpStatus.OK);
   }
+  
+  @Override
+  public ResponseEntity<Map<String, Object>> sendCode(Map<String, Object> params) {
+    
+    // 인증코드 생성
+    String code = MySecurityUtils.getRandomString(6, true, true);
+    
+    // 메일 보내기
+    myJavaMailUtils.sendMail((String)params.get("email")
+                              , "myapp 인증요청"
+                              , "<div>인증코드는 <strong>" + code + "</strong> 입니다.");
+        
+    // 인증코드 입력화면으로 보내주는 값
+    return new ResponseEntity<>(Map.of("code", code)
+                               , HttpStatus.OK);
+    
+    
+  }
+  
   
   @Override
   public void signout(HttpServletRequest request, HttpServletResponse response) {
