@@ -1,9 +1,12 @@
 package com.gdu.myapp.controller;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.gdu.myapp.dto.UserDto;
 import com.gdu.myapp.service.UserService;
 
 import oracle.jdbc.proxy.annotation.Post;
@@ -55,6 +60,20 @@ public class UserController {
 
     //Sign In 페이지로 url  넘겨 주기
     model.addAttribute("url", url);
+    
+    /*********네이버 로그인 1 */
+    String redirectUri = "http://localhost:8080" + request.getContextPath() + "/user/naver/getAccessToken.do";
+    String state = new BigInteger(130, new SecureRandom()).toString(); //네이버개발자센터 코드 뒤져보면 나와있음
+    
+    StringBuilder builder = new StringBuilder();
+    builder.append("https://nid.naver.com/oauth2.0/authorize");
+    builder.append("?response_type=code");
+    builder.append("&client_id=mQJ6ICVxgvpDsA5N7BtO");
+    builder.append("&redirect_uri=" + redirectUri);
+    builder.append("&state=" + state);
+    
+    model.addAttribute("naverLoginUrl", builder.toString());
+    
     return "user/signin"; 
   }
   
@@ -79,6 +98,23 @@ public class UserController {
     
     return userService.sendCode(params);
   }
+  
+  @PostMapping("/signup.do")
+  public void signup(HttpServletRequest request, HttpServletResponse response) {
+    userService.signup(request, response);
+  }
+  
+  //----탈퇴
+  
+  @GetMapping("/leave.do")
+  public void leave(HttpServletRequest request, HttpServletResponse response) {
+    HttpSession session = request.getSession();
+    userService.leave(request, response);
+  }
+  
+
+  
+  
   
   
   
