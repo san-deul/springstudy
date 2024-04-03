@@ -48,10 +48,7 @@
   </bean>
   
    
-  <bean class="org.mybatis.spring.mapper.MapperFactoryBean">
-    <property name="mapperInterface" value="com.gdu.myapp.mapper.UserMapper" />
-    <property name="sqlSessionFactory" ref="sqlSessionFactoryBean"/>
-  </bean> 
+
    
   
   
