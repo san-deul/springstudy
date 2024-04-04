@@ -7,8 +7,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <!-- 페이지마다 다른 제목 -->
 <title>
   <c:choose>
@@ -34,25 +36,21 @@
 <body>
 
   <div class="header-wrap">
-    
+  
     <div class="logo"></div>
-    
+
     <div class="user-wrap">
-    
-        <!-- Sign In 안 된 경우 -->
-        <c:if test="${sessionScope.user == null}">  
-          <a href="${contextPath}/user/signin.page"><i class="fa-solid fa-arrow-right-to-bracket"></i>Sign In</a>
-          <a href="${contextPath}/user/signup.page"><i class="fa-solid fa-user-plus"></i>Sign Up</a>
-        </c:if>
-        
-        <!-- Sign In 된 경우 -->
-        <c:if test="${sessionScope.user != null}">
-          ${sessionScope.user.name}님 반갑습니다
-          <br>
-          <a href="${contextPath}/user/signout.do">로그아웃</a>
-          <a href="${contextPath}/user/leave.do">회원탈퇴</a>
-        </c:if>
-        
+      <!-- Sign In 안 된 경우 -->
+      <c:if test="${sessionScope.user == null}">  
+        <a href="${contextPath}/user/signin.page"><i class="fa-solid fa-arrow-right-to-bracket"></i>Sign In</a>
+        <a href="${contextPath}/user/signup.page"><i class="fa-solid fa-user-plus"></i>Sign Up</a>
+      </c:if>
+      <!-- Sign In 된 경우 -->
+      <c:if test="${sessionScope.user != null}">
+        ${sessionScope.user.name}님 반갑습니다
+        <a href="${contextPath}/user/signout.do">로그아웃</a>
+        <a href="${contextPath}/user/leave.do">회원탈퇴</a>
+      </c:if>
     </div>
     
     <div class="gnb-wrap">
@@ -64,7 +62,8 @@
       </ul>
     </div>
     
+    <div>현재 sessionId : <%=session.getId()%></div>
+    
   </div>
 
   <div class="main-wrap">
-  
