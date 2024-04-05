@@ -15,4 +15,9 @@ public interface BbsMapper {
   int updateGroupOrder(BbsDto bbs);
   int insertReply(BbsDto reply);
   int removeBbs(int bbsNo);
+  
+  int getSearchCount(Map<String, Object> map);
+  List<BbsDto> getSearchList(Map<String, Object> map);
+  
+  
 }

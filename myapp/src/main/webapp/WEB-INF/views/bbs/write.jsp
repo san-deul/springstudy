@@ -42,7 +42,7 @@
 
   document.getElementById('frm-bbs-register').addEventListener('submit', (evt) => {
     fnRegisterBbs(evt);
-  )}
+  })
 
 </script>
 

@@ -18,7 +18,7 @@ public interface UserService {
   void leave(HttpServletRequest request, HttpServletResponse response);
 
   // 로그인 및 로그아웃
-  String getRedirectURLAfterSignin(HttpServletRequest request);
+  String getRedirectURLAfterSignin(HttpServletRequest request);  
   void signin(HttpServletRequest request, HttpServletResponse response);
   void signout(HttpServletRequest request, HttpServletResponse response);
   
@@ -27,8 +27,8 @@ public interface UserService {
   String getNaverLoginAccessToken(HttpServletRequest request);
   UserDto getNaverLoginProfile(String accessToken);
   boolean hasUser(UserDto user);
+  void naverSignin(HttpServletRequest request, UserDto naverUser);
   
-  void naverSignin(HttpServletRequest request,  UserDto naverUser);
-
+  
   
 }

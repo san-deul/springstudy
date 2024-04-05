@@ -15,7 +15,7 @@ public class RequiredSigninInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     
     HttpSession session = request.getSession();
-    if(session.getAttribute("user") ==null) {
+    if(session.getAttribute("user") == null) {
       
       response.setContentType("text/html; charset=UTF-8");
       PrintWriter out = response.getWriter();

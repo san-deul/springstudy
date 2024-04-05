@@ -10,7 +10,9 @@
 <style>
   .blind {
     display: none;
+    
   }
+  .main-wrap{margin:10px;}
 
 </style>
 
@@ -18,6 +20,21 @@
 
 <a href="${contextPath}/bbs/write.page">작성하러가기</a>
 
+<br>
+<div>
+  <form method="GET"
+        action="${contextPath}/bbs/search.do">
+    <div>
+      <select name="column">
+        <option value="U.EMAIL">작성자</option> 
+        <option value="B.CONTENTS">내용</option>
+      </select>
+      <input type="text" name="query" placeholder="검색어 입력">
+      <button type="submit">검색</button>
+    </div>
+  </form>
+</div>
+<br>
 <table border="1">
   <thead>
     <tr>

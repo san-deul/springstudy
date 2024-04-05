@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> params = Map.of("email", email
                                           , "pw", pw
                                           , "ip", request.getRemoteAddr()
-                                          , "userAgent", request.getHeader("User-Agent")
+                                          , "userAgent", request.getHeader("User-Agent") // 접속브라우저
                                           , "sessionId", request.getSession().getId());
        
         // Sign In (세션에 user 저장하기)
@@ -383,7 +383,9 @@ public class UserServiceImpl implements UserService {
       // DB로 보낼 정보 (email/pw: USER_T , email/ip/userAgent/sessionId: ACCESS_HISTORY_T) 
       Map<String, Object> params = Map.of("email", email
                                         , "pw", pw
-                                        , "ip", ip);
+                                        , "ip", ip
+                                        , "userAgent", request.getHeader("User-Agent") // 접속브라우저
+                                        , "sessionId", request.getSession().getId());
       
       // email/pw 가 일치하는 회원 정보 가져오기
       UserDto user = userMapper.getUserByMap(params);
@@ -396,8 +398,8 @@ public class UserServiceImpl implements UserService {
         
         // 회원 정보를 세션(브라우저 닫기 전까지 정보가 유지되는 공간, 기본 30분 정보 유지)에 보관하기
         HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(60);
         session.setAttribute("user", user);
+        session.setMaxInactiveInterval(60); // 세션 유지시간 10초 설정 /* 60 * 30 : 기본값 */
         
         // Sign In 후 페이지 이동
         response.sendRedirect(request.getParameter("url"));
@@ -428,7 +430,7 @@ public class UserServiceImpl implements UserService {
       // Sign Out 기록 남기기
       HttpSession session = request.getSession();
       String sessionId = session.getId(); 
-     // userMapper.updateAccessHistory(sessionId);
+      userMapper.updateAccessHistory(sessionId);
       
       // 세션에 저장된 모든 정보 초기화
       session.invalidate();
