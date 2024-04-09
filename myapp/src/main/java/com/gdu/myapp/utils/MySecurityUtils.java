@@ -41,8 +41,9 @@ public class MySecurityUtils {
     2. 스크립트 코드에 반드시 필요한 "<script>" 입력을 무력화하기 위해서
         "<" 기호와 ">" 기호를 엔티티 코드로 변환한다.
   */
+  
   public static String getPreventXss(String original) {
-    return original.replace("<", "&lt;").replace(">", "&gt;");
+    return original.replace("<script>", "&lt;script$gt;").replace("</script>", "&lt;/script$gt;");
   }
   
   /*

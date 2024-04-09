@@ -5,6 +5,162 @@
 
 <mapper namespace="com.gdu.myapp.mapper.BlogMapper">
 
+  <resultMap type="BlogDto"     id="BlogMap">
+    <id property="blogNo"       column="BLOG_NO"/>
+    <result property="hit"      column="HIT"/>
+    <result property="title"    column="TITLE"/>
+    <result property="contents" column="CONTENTS"/>
+    <result property="createDt" column="CREATE_DT"/>
+    <result property="modifyDt" column="MODIFY_DT"/>
+    <association property="user" javaType="UserDto">
+      <id property="userNo" column="USER_NO"/>
+      <result property="email" column="EMAIL"/>
+    </association>
+  </resultMap>
+  
+  <resultMap type="CommentDto" id="CommentMap">
+    <id property="commentNo" column="COMMENT_NO"/>
+    <result property="depth" column="DEPTH"/>
+    <result property="state" column="STATE"/>
+    <result property="groupNo" column="GROUP_NO"/>
+    <result property="blogNo" column="BLOG_NO"/>
+    <result property="contents" column="CONTENTS"/>
+    <result property="createDt" column="CREATE_DT"/>
+    <association property="user" javaType="UserDto">
+      <id property="userNo" column="USER_NO"/>
+      <result property="email" column="EMAIL"/>
+    </association>
+  </resultMap>
 
+  <insert id = "insertBlog"
+          parameterType="BlogDto">
+    INSERT INTO BLOG_T (
+        BLOG_NO
+      , TITLE
+      , CONTENTS
+      , USER_NO
+      , CREATE_DT
+      , MODIFY_DT
+    ) VALUES (
+        BLOG_SEQ.NEXTVAL
+      , #{title}
+      , #{contents}
+      , #{user.userNo}
+      , CURRENT_TIMESTAMP
+      , CURRENT_TIMESTAMP
+    )
+    <!-- HIT 는 빠짐 DEFAULT 0을 해주었기 때문  -->  
+  </insert>
 
+  <select id="getBlogCount"
+          resultType="int">
+     SELECT COUNT(*)
+       FROM BLOG_T
+  </select>
+  
+  
+  <select id="getBlogList"
+          parameterType="Map"
+          resultMap="BlogMap">
+
+    SELECT BLOG_NO, TITLE, CONTENTS, HIT, CREATE_DT, MODIFY_DT, USER_NO, EMAIL
+      FROM (SELECT ROW_NUMBER() OVER(ORDER BY B.BLOG_NO DESC) AS RN
+                 , B.BLOG_NO, B.TITLE, B.CONTENTS, B.HIT, B.CREATE_DT, B.MODIFY_DT
+                 , U.USER_NO, U.EMAIL
+              FROM USER_T U INNER JOIN BLOG_T B
+                ON U.USER_NO = B.USER_NO)
+     WHERE RN BETWEEN #{begin} AND #{end}
+  </select>
+  
+  <update id="updateHit">
+    UPDATE BLOG_T
+       SET HIT = HIT + 1
+     WHERE BLOG_NO = #{blogNo}
+     
+  </update>
+  
+  <select id ="getBlogByNo"
+          resultMap="BlogMap">
+    SELECT B.BLOG_NO, B.TITLE, B.CONTENTS, B.HIT, B.CREATE_DT, B.MODIFY_DT
+         , U.USER_NO, U.EMAIL
+      FROM USER_T U INNER JOIN BLOG_T B
+        ON U.USER_NO = B.USER_NO
+     WHERE B.BLOG_NO = #{blogNo}
+
+  </select>
+
+  <insert id="insertComment"
+          parameterType="CommentDto">
+    INSERT INTO COMMENT_T (
+        COMMENT_NO
+      , CONTENTS
+      , CREATE_DT
+      , STATE
+      , DEPTH
+      , GROUP_NO
+      , USER_NO
+      , BLOG_NO
+    ) VALUES(
+        COMMENT_SEQ.NEXTVAL
+      , #{contents}
+      , CURRENT_TIMESTAMP
+      , 1
+      , 0
+      , COMMENT_SEQ.CURRVAL
+      , #{user.userNo}
+      , #{blogNo}
+    )
+  </insert>
+  
+  <select id="getCommentCount"
+          resultType="int">
+    SELECT COUNT(*)
+      FROM COMMENT_T
+     WHERE BLOG_NO = #{blogNo}          
+  </select>
+  
+  <select id="getCommentList"
+          parameterType="Map"
+          resultMap="CommentMap">
+    SELECT COMMENT_NO, CONTENTS, CREATE_DT, STATE, DEPTH, GROUP_NO, BLOG_NO, USER_NO, EMAIL
+      FROM (SELECT ROW_NUMBER() OVER(ORDER BY C.GROUP_NO DESC, C.DEPTH ASC, C.COMMENT_NO DESC) AS RN
+                 , C.COMMENT_NO, C.CONTENTS, C.CREATE_DT, C.STATE, C.DEPTH, C.GROUP_NO, C.BLOG_NO
+                 , U.USER_NO, U.EMAIL
+              FROM USER_T U INNER JOIN COMMENT_T C
+                ON U.USER_NO = C.USER_NO
+             WHERE BLOG_NO = #{blogNo})
+     WHERE RN BETWEEN #{begin} AND #{end}
+    
+  </select>
+  
+   <insert id="insertReply"
+          parameterType="CommentDto">
+    INSERT INTO COMMENT_T (
+        COMMENT_NO
+      , CONTENTS
+      , CREATE_DT
+      , STATE
+      , DEPTH
+      , GROUP_NO
+      , USER_NO
+      , BLOG_NO
+    ) VALUES(
+        COMMENT_SEQ.NEXTVAL
+      , #{contents}
+      , CURRENT_TIMESTAMP
+      , 1
+      , 1 
+      , #{groupNo}
+      , #{user.userNo}
+      , #{blogNo}
+    )
+  </insert>
+  
+  <!-- 게시글삭제 -->
+  <delete id="removeBlog">
+    DELETE FROM BLOG_T 
+     WHERE BLOG_NO = #{blogNo} 
+  </delete>
+  
+  
 </mapper>

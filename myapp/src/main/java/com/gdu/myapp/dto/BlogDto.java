@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class BlogDto {
-  private int blogNo;
+  private int blogNo, hit;
   private String title, contents;
   private Timestamp createDt, modifyDt;
   private UserDto user;

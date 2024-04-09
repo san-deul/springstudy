@@ -5,7 +5,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.gdu.myapp.dto.BlogDto;
 
 public interface BlogService {
   ResponseEntity<Map<String, Object>> summernoteImageUpload(MultipartFile multipartFile, String contextPath); 
@@ -19,4 +22,16 @@ public interface BlogService {
    * int registerBlog(리퀘스트, 리퀘스트파람, 커맨드객체);  <- 세개가 변수로 들어갈 수 O
    * */
   
+  ResponseEntity<Map<String, Object>> getBlogList(HttpServletRequest request);
+  
+  int updateHit(int blogNo);
+  BlogDto getBlogByNo(int blogNo);
+  
+  int registerComment(HttpServletRequest request);
+  
+  Map<String, Object> getCommentList(HttpServletRequest request);
+  
+  int registerReply(HttpServletRequest request);
+  
+  int removeBlog(int blogNo);
 }
