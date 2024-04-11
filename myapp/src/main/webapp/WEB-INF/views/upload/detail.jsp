@@ -6,7 +6,7 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
 <jsp:include page="../layout/header.jsp">
-  <jsp:param value="${blog.blogNo}번 블로그" name="title"/>
+  <jsp:param value="${upload.uploadNo}번 블로그" name="title"/>
 </jsp:include>
 
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
@@ -15,70 +15,33 @@
 .main-wrap{width:90%;margin:0 auto;}
 </style>
 
-<h1 class="title">블로그 상세화면</h1>
+<h1 class="title">업로드 상세화면</h1>
 
   <div>
     <span>작성자</span>
-    <span>${blog.user.email}</span>
+    <span>${upload.user.email}</span>
   </div>
   
   <div>
     <span>제목</span>
-    <span>${blog.title}</span>
-  </div>
-  
-  <div>
-    <span>조회수</span>
-    <span>${blog.hit}</span>
+    <span>${upload.title}</span>
   </div>
   
   <div>
     <span>내용</span>
-    <span>${blog.contents}</span>
-    <!--  <span>${blog.user.userNo}</span>-->
+    <span>${upload.contents}</span>
+    
   </div>
   
 
   
 
   
-<hr>
-<!-- 댓글 작성 창 -->
-<form id="frm-comment">
-  <textarea id="contents" name="contents"></textarea>
-  
-  <input type="hidden" name="blogNo" value="${blog.blogNo}">
-  
-  <c:if test="${not empty sessionScope.user}" >
-    <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
-  </c:if>
-  
-  <!--c:if없이 'sessionScope.user.userNo' 쓰면 로그인안한상태면 null 값 뜸 -->
-  
-  <button type="button" id="btn-comment-register" >댓글등록</button>
-</form>
-
-<hr>
-
-<!-- 댓글 목록 -->
-<div id="comment-list"></div>
-<div id="paging"></div>
-
-<style>
-#detail-btns{position:fixed;top:50%;transform:translateY(-50%);right:10px}
-#detail-btns .detail-btn{width:120px;height:30px;cursor:pointer;border:1px solid orange;}
-
-</style>
 
 
-<!-- 로그인 했을시, userNo가 맞을시 삭제,수정버튼 보이게 -->
 
-  <div id="detail-btns">
-    <c:if test="${blog.user.userNo == sessionScope.user.userNo}">
-      <button type="button" class="detail-btn detail-remove">삭제</button>
-      <button type="button" class="detail-btn detail-modify">수정</button>
-    </c:if>
-  </div>
+
+
 
 
 
