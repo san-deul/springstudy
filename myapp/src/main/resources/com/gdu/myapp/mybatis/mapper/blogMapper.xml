@@ -162,5 +162,5 @@
      WHERE BLOG_NO = #{blogNo} 
   </delete>
   
-  
+
 </mapper>

@@ -5,7 +5,7 @@
 
 <mapper namespace="com.gdu.myapp.mapper.UploadMapper">
 
-  <resultMap type="UploadDto"   id="UploadMap">
+  <resultMap type="UploadDto" id="UploadMap">
     <id     property="uploadNo"    column="UPLOAD_NO" />
     <result property="title"       column="TITLE"/>
     <result property="contents"    column="CONTENTS"/>
@@ -13,11 +13,10 @@
     <result property="modifyDt"    column="MODIFY_DT"/>
     <result property="attachCount" column="ATTACH_COUNT"/>
     <association property="user" javaType="UserDto">
-      <id     property="userNo"    column="USER_NO"/>
-      <result property="email"     column="EMAIL"/>
+      <id     property="userNo" column="USER_NO"/>
+      <result property="email"  column="EMAIL"/>
     </association>
   </resultMap>
-
 
   <!-- INSERT 수행 이전에 파라미터 UploadDto의 uploadNo 속성(필드)에 UPLOAD_SEQ.NEXTVAL 값을 저장한다. -->
   <insert id="insertUpload"
@@ -63,48 +62,70 @@
       , #{uploadNo}
     )
   </insert>
-  
+
   <select id="getUploadCount">
     SELECT COUNT(*)
       FROM UPLOAD_T
   </select>
   
-  <!-- UPLOAD_T 목록 -->
   <select id="getUploadList"
           parameterType="Map"
           resultMap="UploadMap">
-    SELECT  UPLOAD_NO, TITLE, CONTENTS, CREATE_DT, MODIFY_DT
-          , USER_NO, EMAIL     
-          , ATTACH_COUNT
+    SELECT UPLOAD_NO, TITLE, CONTENTS, CREATE_DT, MODIFY_DT
+         , USER_NO, EMAIL
+         , ATTACH_COUNT
       FROM (SELECT ROW_NUMBER() OVER (ORDER BY UPLOAD_NO ${sort}) AS RN
-                ,  UP.UPLOAD_NO, UP.TITLE, UP.CONTENTS, UP.CREATE_DT, UP.MODIFY_DT
-                ,  USR.USER_NO, USR.EMAIL
-                , (SELECT COUNT(*)
-                     FROM ATTACH_T ATC
-                    WHERE UP.UPLOAD_NO = ATC.UPLOAD_NO) AS ATTACH_COUNT
-             FROM USER_T USR INNER JOIN UPLOAD_T UP
-               ON USR.USER_NO = UP.USER_NO)
+                 , UP.UPLOAD_NO, UP.TITLE, UP.CONTENTS, UP.CREATE_DT, UP.MODIFY_DT
+                 , USR.USER_NO, USR.EMAIL
+                 , (SELECT COUNT(*)
+                      FROM ATTACH_T ATC
+                     WHERE UP.UPLOAD_NO = ATC.UPLOAD_NO) AS ATTACH_COUNT
+              FROM USER_T USR INNER JOIN UPLOAD_T UP
+                ON USR.USER_NO = UP.USER_NO)
      WHERE RN BETWEEN #{begin} AND #{end}
   </select>
   
-  
-
-    
-    
-  <!-- UPLOAD_NO, TITLE, CONTENTS, CREATE_DT,MODIFY_DT -->
-  <!-- USER_NO, EMAIL -->
-  <!-- ATTACH_COUNT -->  
-  
-  <!-- 상세보기 -->
   <select id="getUploadByNo"
           resultMap="UploadMap">
-      SELECT  UP.UPLOAD_NO, UP.TITLE, UP.CONTENTS, UP.CREATE_DT, UP.MODIFY_DT
-        , USR.USER_NO, USR.EMAIL     
-        FROM USER_T USR INNER JOIN UPLOAD_T UP
-          ON USR.USER_NO = UP.USER_NO
-       WHERE UP.UPLOAD_NO = ${uploadNo}
+    SELECT UP.UPLOAD_NO, UP.TITLE, UP.CONTENTS, UP.CREATE_DT, UP.MODIFY_DT
+         , USR.USER_NO, USR.EMAIL
+      FROM USER_T USR INNER JOIN UPLOAD_T UP
+        ON USR.USER_NO = UP.USER_NO
+     WHERE UP.UPLOAD_NO = #{uploadNo}
   </select>
   
+  <select id="getAttachList"
+          resultType="AttachDto">
+    SELECT ATTACH_NO, UPLOAD_PATH, FILESYSTEM_NAME, ORIGINAL_FILENAME, DOWNLOAD_COUNT, HAS_THUMBNAIL
+      FROM ATTACH_T
+     WHERE UPLOAD_NO = #{uploadNo}
+  </select>
   
+  <select id="getAttachByNo"
+          resultType="AttachDto">
+    SELECT ATTACH_NO, UPLOAD_PATH, FILESYSTEM_NAME, ORIGINAL_FILENAME, DOWNLOAD_COUNT, HAS_THUMBNAIL
+      FROM ATTACH_T
+     WHERE ATTACH_NO = #{attachNo}
+  </select>
   
+  <update id="updateDownloadCount">
+    UPDATE ATTACH_T
+       SET DOWNLOAD_COUNT = DOWNLOAD_COUNT + 1
+     WHERE ATTACH_NO = #{attachNo}
+  </update>
+  
+  <update id="updateUpload"
+          parameterType="UploadDto">
+    UPDATE UPLOAD_T
+       SET TITLE = #{title}
+         , CONTENTS = #{contents}
+         , MODIFY_DT = TO_CHAR(CURRENT_DATE, 'YYYY-MM-DD HH24:MI:SS')
+     WHERE UPLOAD_NO = #{uploadNo}
+  </update>
+  
+    <delete id="deleteAttach">
+    DELETE
+      FROM ATTACH_T
+     WHERE ATTACH_NO = #{attachNo}
+  </delete>
 </mapper>

@@ -26,10 +26,20 @@ public class MyFileUtils {
       extName = originalFilename.substring(originalFilename.lastIndexOf("."));
     }
     return UUID.randomUUID().toString().replace("-", "") + extName;
-    
         
   }
   
   
+  // 임시파일 경로 반환
+  public String getTempPath() {
+    return "/temporary";
+    
+  }
+  
+  
+  // 임시파일 이름 반환 (확장자 제외)
+  public String getTempFilename() {
+    return System.currentTimeMillis() + "";
+  }
   
 }
